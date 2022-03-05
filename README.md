@@ -1,5 +1,6 @@
 # mosca-ceca-project
-i'm not dyslexic i swear 
+(i'm not dyslexic i swear)
+**this repository is gonna be filled with content soon**
 
 ## mosca ceca the game
 
