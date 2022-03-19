@@ -38,6 +38,7 @@ Ogni agente in ogni momento conosce:
 Sono presenti due tipi di risorse
 - **Energia**, presente nelle colonnine di ricarica. Le colonne di ricarica hanno una quantità infinita di energia, ma ne trasferiscono 10 unità ad ogni turno.
 - **Stoffa**, presente in alcuni punti della mappa. La quantità di stoffa presente in un punto è limitata ed ogni volta che un agente ne raccoglie un’unità, la risorsa corrispondente diminuisce di un’unità.
+
 Ogni risorsa viene generata automaticamente dalla scacchiera all'inizio del gioco.
 E' importante sottolineare che **un solo agente per volta** può usufruire di una colonnina di ricarica
 
