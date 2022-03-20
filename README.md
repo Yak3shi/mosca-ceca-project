@@ -59,7 +59,7 @@ La **gestione di un turno tipo** da parte della classe Gioco è la seguente:
 1. Viene verificato che ci siano ancora tempo e turni a disposizione per poter iniziare il nuovo turno
 2. Viene inviata a tutti gli agenti la richiesta di invio delle proprie mosse desiderate
     - Dopo un periodo ragionevole di tempo, se un agente ancora non ha inviato la propria mossa si presume che esso si sia in qualche modo bloccato. In tal caso, esso viene escluso e la classe Gioco stampa un messaggio ad hoc (del tipo "AGENT XYZ ERROR: NO RESPONSE IN TIME") per permettere al suo sviluppatore di verificare cosa ci sia che non va
-3. Le varie proposte vengono confrontate tra loro per controllare che non ce ne siano di uguali.
+3. Le varie richieste vengono confrontate tra loro per controllare che non ce ne siano di uguali.
     - In caso due proposte coincidano, l'idea era far partire una specie di testa-croce per decidere quale delle due verrà tenuta e quale, invece, scartata.
     - Se invece un giocatore decide di stazionare in una casella e un altro vuole accedervi, ovviamente verrà scartata la seconda richiesta.
 4. Una volta appurato che tutte le scelte sono eseguibili e non causano concorrenza né tanto meno vanno contro le regole, la classe Gioco comunica con la scacchiera per muovere gli agenti su di essa, aggiornare lo status delle caselle occupate dai giocatori e colonnine di ricarica, e rimuovere eventuali unità di risorsa raccolte. 
