@@ -14,7 +14,8 @@ public class Agente extends Thread implements Ag_Interface {
     ArrayList<Casella> territori;// lista di riferimenti alle istanze delle caselle facenti parte del territorio
                                  // dell'agente
 
-    boolean moveMade; // L'agente ha fatto la sua mossa
+    boolean moveMade; // true se l'agente ha fatto la sua mossa
+    String move; //L'agente usa questa variabile per comunicare la sua azione alla classe gioco 
     
 
     public Agente(String nome, Scacchiera scacchiera, Casella posizione, Casella ricarica, Casella[] adiacenti) {
@@ -27,6 +28,8 @@ public class Agente extends Thread implements Ag_Interface {
         this.ricarica = ricarica;
         this.adiacenti = adiacenti;
         territori = new ArrayList<>();
+        moveMade = false;
+        move = "";
     }
 
     // avvia le azioni degli agenti
@@ -45,6 +48,9 @@ public class Agente extends Thread implements Ag_Interface {
         System.out.println("Territori:");
         for (Casella c : territori)
             System.out.println("[" + c.getX() + ", " + c.getY() + "]");
+    }
+
+    public void askMove(){
         int scelta = 1;
         if (nome.equals("A0")) {
             System.out.println("Che cosa vuoi effettuare?\n1.Pianta bandiera\n2.Spostati");
@@ -211,66 +217,94 @@ public class Agente extends Thread implements Ag_Interface {
 
     // spostamento a sinistra
     public void sinistra() {
-        if (scacchiera.accesso(posizione.getX(), posizione.getY() - 1, posizione, this))
+        /*if (scacchiera.accesso(posizione.getX(), posizione.getY() - 1, posizione, this))
             energia--;
-            setMoveMade(true);
+            */
+        setMove("sinistra");
+        setMoveMade(true);
     }
 
     // spostamento a alto a sinistra
     public void alto_sinistra() {
-        if (scacchiera.accesso(posizione.getX() - 1, posizione.getY() - 1, posizione, this))
+        /*if (scacchiera.accesso(posizione.getX() - 1, posizione.getY() - 1, posizione, this))
             energia--;
-            setMoveMade(true);
+            setMoveMade(true);*/
+        setMove("alto_sinistra");
+        setMoveMade(true);
     }
 
     // spostamento in alto
     public void alto() {
-        if (scacchiera.accesso(posizione.getX() - 1, posizione.getY(), posizione, this))
-            energia--;
-            setMoveMade(true);
+        /*if (scacchiera.accesso(posizione.getX() - 1, posizione.getY(), posizione, this))
+            energia--;*/
+        setMove("alto");
+        setMoveMade(true);
+            
     }
 
     // spostamento in alto a destra
     public void alto_destra() {
-        if (scacchiera.accesso(posizione.getX() - 1, posizione.getY() + 1, posizione, this))
+        /*if (scacchiera.accesso(posizione.getX() - 1, posizione.getY() + 1, posizione, this))
             energia--;
-            setMoveMade(true);
+            */
+        setMove("alto_destra");
+        setMoveMade(true);
     }
 
     // spostamento a destra
     public void destra() {
-        if (scacchiera.accesso(posizione.getX(), posizione.getY() + 1, posizione, this))
+        /*if (scacchiera.accesso(posizione.getX(), posizione.getY() + 1, posizione, this))
             energia--;
-            setMoveMade(true);
+            setMoveMade(true);*/
+        setMove("destra");
+        setMoveMade(true);
     }
 
     // spostamento in basso a destra
     public void basso_destra() {
-        if (scacchiera.accesso(posizione.getX() + 1, posizione.getY() + 1, posizione, this))
-            energia--;
-            setMoveMade(true);
+        /*if (scacchiera.accesso(posizione.getX() + 1, posizione.getY() + 1, posizione, this))
+            energia--;*/
+        setMove("basso_destra");
+        setMoveMade(true);
     }
 
     // spostamento in basso
     public void basso() {
-        if (scacchiera.accesso(posizione.getX() + 1, posizione.getY(), posizione, this))
-            energia--;
-            setMoveMade(true);
+        /*if (scacchiera.accesso(posizione.getX() + 1, posizione.getY(), posizione, this))
+            energia--;*/
+        setMove("basso");
+        setMoveMade(true);
     }
 
     // spostamento in basso a sinistra
     public void basso_sinistra() {
-        if (scacchiera.accesso(posizione.getX() + 1, posizione.getY() - 1, posizione, this))
-            energia--;
-            setMoveMade(true);
+        /*if (scacchiera.accesso(posizione.getX() + 1, posizione.getY() - 1, posizione, this))
+            energia--;*/
+        setMove("basso_sinistra");
+        setMoveMade(true);
     }
 
-    public boolean isMoveMade() {
+    public boolean isMoveMade() {//metodo usato dalla classe gioco per verificare se l'agente ha fatto la sua mossa
         return moveMade;
     }
 
+    //imposta il valore a true o false se necessario
+    //se true, indica che l'agente ha deciso la sua mossa e attende di sapere dalla classe Gioco se può farla o meno
     public void setMoveMade(boolean moveMade) {
         this.moveMade = moveMade;
     }
+
+    //restituisce la mossa che l'agente ha scelto di fare
+    //serve alla classe gioco per sapere in quale casella l'agente vuole andare, per vedere se essa entra in conflitto con quella di un altro agente
+    public String getMove() {
+        return move;
+    }
+
+    //modifica il valore della stringa contenente la mossa che vuole fare l'agente
+    public void setMove(String move) {
+        this.move = move;
+    }
+
+    
 
 }

@@ -7,7 +7,6 @@ public class Scacchiera implements Scac_Interface {
 
     public Scacchiera() {
         scacchiera = new Casella[100][100];
-        agenti = new Agente[20];
         ricariche = new ArrayList<>();
         generate();
     }
@@ -23,19 +22,6 @@ public class Scacchiera implements Scac_Interface {
                     ricariche.add(scacchiera[i][j]);
                 }
             }
-        }
-        for (int i = 0; i < agenti.length; i++) {
-            int x = xy();
-            int y = xy();
-            while (true)
-                if (!scacchiera[x][y].occupato()) {
-                    agenti[i] = new Agente("A" + i, this, scacchiera[x][y], trovaRicarica(x, y), getNeighborhood(x, y));
-                    scacchiera[x][y].occupa(agenti[i]);
-                    break;
-                } else {
-                    x = xy();
-                    y = xy();
-                }
         }
     }
 
@@ -121,13 +107,13 @@ public class Scacchiera implements Scac_Interface {
         }
     }
 
-    private int xy() {
+    int xy() {
         return (int) Math.random() * 99;
     }
 
     // metodo che ritorna il riferimento alla casella con stazione di ricarica più
     // vicina alla posizione dell'agente
-    private Casella trovaRicarica(int x, int y) throws IndexOutOfBoundsException {
+    Casella trovaRicarica(int x, int y) throws IndexOutOfBoundsException {
         Casella ricarica = ricariche.get(0);
         for (Casella c : ricariche) {
             if ((Math.abs(c.getX() - x) + Math.abs(c.getY() - y)) < (Math.abs(ricarica.getX() - x)

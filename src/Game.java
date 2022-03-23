@@ -13,8 +13,21 @@ public class Game {
 
     ArrayList <Agente> playerList = new ArrayList<>(); //Lista a cui attingere per comunicare con i vari giocatori
 
-    public void addAgent(){
-        //AGGIUNTA AGENTE
+    //AGGIUNTA AGENTI ALLA PARTITA
+    //per il momento è una cosa fatta automaticamente, poi penseremo dopo a come adattarlo al multiplayer online 
+    public void generateAgents(){ 
+        for (int i = 0; i < 20; i++) {
+            int x = game.xy();
+            int y = game.xy();
+            while (true)
+                if (!game.scacchiera[x][y].occupato()) {
+                    playerList.add(new Agente("A" + i, game, game.scacchiera[x][y], game.trovaRicarica(x, y), game.getNeighborhood(x, y)));
+                    break;
+                } else {
+                    x = game.xy();
+                    y = game.xy();
+                }
+        }
     }
 
     Agente Classifica[];  //Classifica agenti 
@@ -52,40 +65,32 @@ public class Game {
         }
     }
 
-    public void exclude(){ // metodo per escludere un agente dal gioco
-
-    }
-
     public boolean allMovesReceived(){//Controlla che tutti gli agenti abbiano inviato le loro mosse
         return false;
     }
 
     public void execTurn(){
-        if(!checkIfAllTurnsEnded() && !checkIfNoTime()){
-            while(!allMovesReceived()/*tutti hanno dato la loro mossa*/){
-                for(Agente a: playerList){ // per ogni agente in game
-                    //chiama il metodo per conoscere la risposta dell'agente
-                    if(!a.isMoveMade() && timeOut()/*nessuna risposta da questo agente && limite di tempo superato */){
-                        playerList.remove(a); // agente escluso
-                        System.out.println(a.nome + " ELIMINATED DUE TO: out of time \n Developer to check if there are some errors that could have stopped it");
-                    }
-                    else if(a.getMove() != null/*nuova risposta */){
-                        //confronta con le altre risposte
-                        //se trova che l'agente 'a' è in collisione con un altro agente, restituisce anche la posizione di quel secondo agente 'b' 
-                        if(/*collisione tra due risposte */){
-                            
-                        }
-                    }
-                }
-                //esegui le mosse
+        generateAgents();
+        while(!checkIfAllTurnsEnded() && !checkIfNoTime()){
+            // Chiedere agli agenti quali sono le loro mosse
+            for (Agente a: playerList){
+                a.askMove();                //Chiedo all'agente quale mossa vuole fare.
+                checkMove(a);               //Controlla se l'agente ha fornito la sua mossa.
             }
 
-            turnlimit--; //diminuisci il conteggio dei turni  
-        }else
-            break;
-        
+            //Controlla eventuale concorrenza.  
+        }
     }
 
+    public void checkMove(Agente a){
+        if(!a.isMoveMade() || a.getMove().equals("")){
+            playerList.remove(a);
+            System.out.println("AGENT " + a.getName() + " GOT REMOVED FROM THE GAME - ERROR: NO ANSWER GIVEN - DEV TO CHECK WHAT MAY HAVE CAUSED THE ERROR");
+        }
+    }
+
+
+    // Confronta due risposte che sono, teoricamente, tra loro in collisione, e ne scarta una a caso
     public void collisionRemoval(Agente a, Agente b){
         int random = (int)(Math.random()*2) + 1;
         switch(random){
