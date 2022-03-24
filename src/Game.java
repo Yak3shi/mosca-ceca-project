@@ -9,8 +9,7 @@ public class Game {
     boolean allResponded = false; //valore che controlla se tutti gli agenti hanno risposto
 
     int timeLimit;  //Segna il limite di tempo di una partita (millisecondi)
-    int turnlimit;  //Contiene il numero massimo di turni in una partita. Viene decrementato ogni volta che finisce il turno;
-
+    
     ArrayList <Agente> playerList = new ArrayList<>(); //Lista a cui attingere per comunicare con i vari giocatori
 
     //AGGIUNTA AGENTI ALLA PARTITA
@@ -33,9 +32,8 @@ public class Game {
     Agente Classifica[];  //Classifica agenti 
 
     //VENGONO PASSATI TEMPO TOTALE E TURNI DESIDERATI, PIU' IL RIFERIMENTO ALLA SCACCHIERA
-    public Game(int tempo, int turni, Scacchiera partita) {
+    public Game(int tempo, Scacchiera partita) {
         timeLimit = tempo;
-        turnlimit = turni;
         game = partita;
     }
 
@@ -45,15 +43,6 @@ public class Game {
             return true;
         }
         return false;
-    }
-
-    public boolean checkIfAllTurnsEnded(){
-        if(turnlimit == 0){
-            endGame("TURNI TERMINATI");
-            return true;
-        }
-
-        return false;    
     }
 
     public void endGame(String endmsg){
@@ -71,12 +60,20 @@ public class Game {
 
     public void execTurn(){
         generateAgents();
-        while(!checkIfAllTurnsEnded() && !checkIfNoTime()){
+        while(!checkIfNoTime()){
             // Chiedere agli agenti quali sono le loro mosse
             for (Agente a: playerList){
                 a.askMove();                //Chiedo all'agente quale mossa vuole fare.
                 checkMove(a);               //Controlla se l'agente ha fornito la sua mossa.
             }
+
+            for (Agente a: playerList){
+                switch(a.move){
+                    case "": 
+                }
+            }
+
+            
 
             //Controlla eventuale concorrenza.  
         }
@@ -89,17 +86,7 @@ public class Game {
         }
     }
 
+    public void updateRanking(){
 
-    // Confronta due risposte che sono, teoricamente, tra loro in collisione, e ne scarta una a caso
-    public void collisionRemoval(Agente a, Agente b){
-        int random = (int)(Math.random()*2) + 1;
-        switch(random){
-            case 1: 
-                //richiedi nuova risposta ad agente a;
-                break;
-            case 2: 
-                //richiedi nuova risposta ad agente b;
-                break;    
-        }
     }
 }
