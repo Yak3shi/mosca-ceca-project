@@ -2,12 +2,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-    Scacchiera game = new Scacchiera();
-
-    int turnTimeLimit; //Limite di tempo di attesa perché un thread comunichi la propria scelta. In caso la scelta non arrivi, il thread viene ignorato
-    
-    boolean allResponded = false; //valore che controlla se tutti gli agenti hanno risposto
-
+    Scacchiera scacchiera = new Scacchiera();
     int timeLimit;  //Segna il limite di tempo di una partita (millisecondi)
     
     ArrayList <Agente> playerList = new ArrayList<>(); //Lista a cui attingere per comunicare con i vari giocatori
@@ -16,25 +11,25 @@ public class Game {
     //per il momento è una cosa fatta automaticamente, poi penseremo dopo a come adattarlo al multiplayer online 
     public void generateAgents(){ 
         for (int i = 0; i < 20; i++) {
-            int x = game.xy();
-            int y = game.xy();
+            int x = scacchiera.xy();
+            int y = scacchiera.xy();
             while (true)
-                if (!game.scacchiera[x][y].occupato()) {
-                    playerList.add(new Agente("A" + i, game, game.scacchiera[x][y], game.trovaRicarica(x, y), game.getNeighborhood(x, y)));
+                if (!scacchiera.scacchiera[x][y].occupato()) {
+                    playerList.add(new Agente("A" + i, this, scacchiera, scacchiera.scacchiera[x][y], scacchiera.trovaRicarica(x, y), scacchiera.getNeighborhood(x, y)));
                     break;
                 } else {
-                    x = game.xy();
-                    y = game.xy();
+                    x = scacchiera.xy();
+                    y = scacchiera.xy();
                 }
         }
     }
 
     Agente Classifica[];  //Classifica agenti 
 
-    //VENGONO PASSATI TEMPO TOTALE E TURNI DESIDERATI, PIU' IL RIFERIMENTO ALLA SCACCHIERA
+    //VENGONO PASSATI TEMPO TOTALE e IL RIFERIMENTO ALLA SCACCHIERA
     public Game(int tempo, Scacchiera partita) {
         timeLimit = tempo;
-        game = partita;
+        scacchiera = partita;
     }
 
     public boolean checkIfNoTime(){
@@ -61,29 +56,87 @@ public class Game {
     public void execTurn(){
         generateAgents();
         while(!checkIfNoTime()){
-            // Chiedere agli agenti quali sono le loro mosse
-            for (Agente a: playerList){
-                a.askMove();                //Chiedo all'agente quale mossa vuole fare.
-                checkMove(a);               //Controlla se l'agente ha fornito la sua mossa.
+            for (Agente a: Classifica){
+                System.out.println(a.getName());
             }
-
-            for (Agente a: playerList){
-                switch(a.move){
-                    case "": 
-                }
-            }
-
-            
-
-            //Controlla eventuale concorrenza.  
         }
     }
 
-    public void checkMove(Agente a){
-        if(!a.isMoveMade() || a.getMove().equals("")){
-            playerList.remove(a);
-            System.out.println("AGENT " + a.getName() + " GOT REMOVED FROM THE GAME - ERROR: NO ANSWER GIVEN - DEV TO CHECK WHAT MAY HAVE CAUSED THE ERROR");
+    public void verifyMove(Agente a, String mossa){
+        switch(mossa){
+            case "sinistra":        // RICHIESTA DI MOSSA A SINISTRA
+                if (scacchiera.accesso(a.posizione.getX(), a.posizione.getY() - 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break;
+            
+            case "alto_sinistra":   // RICHIESTA DI MOSSA IN ALTO A SINISTRA
+                if (scacchiera.accesso(a.posizione.getX() - 1, a.posizione.getY() - 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break;
+
+            case "alto":            // RICHIESTA DI MOSSA IN ALTO
+                if (scacchiera.accesso(a.posizione.getX() - 1, a.posizione.getY() - 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break;
+
+            case "alto_destra":     // RICHIESTA DI MOSSA IN ALTO A DESTRA
+            if (scacchiera.accesso(a.posizione.getX() - 1, a.posizione.getY() + 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break; 
+                
+            case "destra":          // RICHIESTA DI MOSSA A DESTRA
+            if (scacchiera.accesso(a.posizione.getX(), a.posizione.getY() + 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break; 
+                
+            case "basso_destra":    // RICHIESTA DI MOSSA IN BASSO A DESTRA
+            if (scacchiera.accesso(a.posizione.getX() + 1, a.posizione.getY() + 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break;  
+                
+                
+            case "basso":           // RICHIESTA DI MOSSA IN BASSO
+            if (scacchiera.accesso(a.posizione.getX() + 1, a.posizione.getY(), a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break;      
+
+            case "basso_sinistra":  // RICHIESTA DI MOSSA IN BASSO A SINISTRA
+            if (scacchiera.accesso(a.posizione.getX() + 1, a.posizione.getY() - 1, a.posizione, a)) // se mossa è possibile
+                    a.setEnergia(a.getEnergia() - 1);   // diminuisci l'energia
+                else
+                    a.askMove();                        //se la mossa non è disponibile, ne chiede un'altra
+                
+                break;
+
+            case "pianta":          // RICHIESTA PIANTARE BANDIERA
+                if (scacchiera.pianta(a.posizione.getX(), a.posizione.getY(), a)) {
+                    a.setEnergia(a.getEnergia() - 4);
+                    a.territori.add(a.posizione);
+                }    
+                break;
         }
+
     }
 
     public void updateRanking(){

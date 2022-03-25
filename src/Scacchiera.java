@@ -157,13 +157,45 @@ public class Scacchiera implements Scac_Interface {
     
     // metodo con accesso limitato per piantare una bandiera utilizzando la stoffa
     // posseduta e ottenere il territorio
-
-    // avvia il funzionamento degli agenti, delle caselle e della scacchiera
-    public void esegui() throws InterruptedException {
-        for (int i = 0; i < agenti.length; i++)
-            agenti[i].start();
-        for (int i = 0; i < agenti.length; i++)
-            agenti[i].join();
+    synchronized public boolean bandiera(Casella posizione, String nome, int stoffa, Casella[] adiacenti, Agente agente){
+        //controllo, con l'utilizzo del boolean 'b', della presenza di caselle possedute adiacenti
+        boolean b = false;
+        for(Casella c : adiacenti){
+            if(c.getProprietà().equals(nome)) {
+                b = true;
+                break;
+            }
+        }
+        //caselle possedute adiacenti (costo 4)
+        if(b){
+            //controllo che la casella non sia già proprietà di qualcun'altro e che la stoffa dell'agente sia sufficiente
+            if(posizione.getProprietà().equals("") && stoffa>=4) {
+                //set della proprietà della casella
+                posizione.setProprietà(nome);
+                //set della stoffa dell'agente
+                agente.setStoffa(-4);
+                return true;
+            }else {
+                //avviso di impossibilità di piantare la bandiera
+                System.out.println("Casella già posseduta in territorio altrui o stoffa insufficiente");
+                return false;
+            }
+        //caselle possedute non adiacenti (costo 8)
+        }else{
+            //controllo che la casella non sia già proprietà di qualcun'altro e che la stoffa dell'agente sia sufficiente
+            if(posizione.getProprietà().equals("") && stoffa>=8) {
+                //set della proprietà della casella
+                posizione.setProprietà(nome);
+                //set della stoffa dell'agente
+                agente.setStoffa(-8);
+                return true;
+            }else {
+                //avviso di impossibilità di piantare la bandiera
+                System.out.println("Casella già posseduta in territorio altrui o stoffa insufficiente");
+                return false;
+            }
+        }
     }
+
 
 }

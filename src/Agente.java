@@ -11,25 +11,22 @@ public class Agente extends Thread implements Ag_Interface {
     Casella ricarica;// riferimento all'istanza della casella con stazione di ricarica più vicina
     Casella[] adiacenti;// array di rifermenti alle istanze delle caselle adiacenti alla casella in cui
                         // si trova l'agente
+
+    Game game;
     ArrayList<Casella> territori;// lista di riferimenti alle istanze delle caselle facenti parte del territorio
                                  // dell'agente
 
-    boolean moveMade; // true se l'agente ha fatto la sua mossa
-    String move; //L'agente usa questa variabile per comunicare la sua azione alla classe gioco 
-    
-
-    public Agente(String nome, Scacchiera scacchiera, Casella posizione, Casella ricarica, Casella[] adiacenti) {
+    public Agente(String nome, Game game, Scacchiera scacchiera, Casella posizione, Casella ricarica, Casella[] adiacenti) {
         this.nome = nome;
         energia = 100;
         stoffa = 40;
-        moveMade = false;
+        
+        this.game = game;
         this.scacchiera = scacchiera;
         this.posizione = posizione;
         this.ricarica = ricarica;
         this.adiacenti = adiacenti;
         territori = new ArrayList<>();
-        moveMade = false;
-        move = "";
     }
 
     // avvia le azioni degli agenti
@@ -150,10 +147,11 @@ public class Agente extends Thread implements Ag_Interface {
     // metodo per compiere l'azione di piantare la bandiera ed entrare in possesso
     // della casella in cui è posizionato
     public void pianta() {
-        if (scacchiera.pianta(this.posizione.getX(), this.posizione.getY(), this)) {
+        /*if (scacchiera.pianta(this.posizione.getX(), this.posizione.getY(), this)) {
             energia--;
             territori.add(posizione);
-        }
+        }*/
+        
     }
 
     @Override
@@ -180,6 +178,10 @@ public class Agente extends Thread implements Ag_Interface {
     // getter dell'energia dell'agente
     public int getEnergia() {
         return energia;
+    }
+
+    public void setEnergia(int energia) {
+        this.energia = energia;
     }
 
     // getter del riferimento alla casella in cui si trova l'agente
@@ -215,96 +217,46 @@ public class Agente extends Thread implements Ag_Interface {
         energia += 10;
     }
 
-    // spostamento a sinistra
+    // richiesta spostamento a sinistra
     public void sinistra() {
-        /*if (scacchiera.accesso(posizione.getX(), posizione.getY() - 1, posizione, this))
-            energia--;
-            */
-        setMove("sinistra");
-        setMoveMade(true);
+        game.verifyMove(this, "sinistra");
     }
 
-    // spostamento a alto a sinistra
+    // richiesta spostamento a alto a sinistra
     public void alto_sinistra() {
-        /*if (scacchiera.accesso(posizione.getX() - 1, posizione.getY() - 1, posizione, this))
-            energia--;
-            setMoveMade(true);*/
-        setMove("alto_sinistra");
-        setMoveMade(true);
+        game.verifyMove(this, "alto_sinistra");
     }
 
-    // spostamento in alto
+    // richiesta spostamento in alto
     public void alto() {
-        /*if (scacchiera.accesso(posizione.getX() - 1, posizione.getY(), posizione, this))
-            energia--;*/
-        setMove("alto");
-        setMoveMade(true);
-            
+        game.verifyMove(this, "alto");            
     }
 
-    // spostamento in alto a destra
+    // richiesta spostamento in alto a destra
     public void alto_destra() {
-        /*if (scacchiera.accesso(posizione.getX() - 1, posizione.getY() + 1, posizione, this))
-            energia--;
-            */
-        setMove("alto_destra");
-        setMoveMade(true);
+        game.verifyMove(this, "alto_destra");
     }
 
-    // spostamento a destra
+    // richiesta spostamento a destra
     public void destra() {
-        /*if (scacchiera.accesso(posizione.getX(), posizione.getY() + 1, posizione, this))
-            energia--;
-            setMoveMade(true);*/
-        setMove("destra");
-        setMoveMade(true);
+        game.verifyMove(this, "destra");
+        
     }
 
-    // spostamento in basso a destra
+    // richiesta spostamento in basso a destra
     public void basso_destra() {
-        /*if (scacchiera.accesso(posizione.getX() + 1, posizione.getY() + 1, posizione, this))
-            energia--;*/
-        setMove("basso_destra");
-        setMoveMade(true);
+        game.verifyMove(this, "basso_destra");
     }
 
-    // spostamento in basso
+    // richiesta spostamento in basso
     public void basso() {
-        /*if (scacchiera.accesso(posizione.getX() + 1, posizione.getY(), posizione, this))
-            energia--;*/
-        setMove("basso");
-        setMoveMade(true);
+        game.verifyMove(this, "basso");
     }
 
-    // spostamento in basso a sinistra
+    // richiesta spostamento in basso a sinistra
     public void basso_sinistra() {
-        /*if (scacchiera.accesso(posizione.getX() + 1, posizione.getY() - 1, posizione, this))
-            energia--;*/
-        setMove("basso_sinistra");
-        setMoveMade(true);
+        game.verifyMove(this, "basso_sinistra");
+        
     }
-
-    public boolean isMoveMade() {//metodo usato dalla classe gioco per verificare se l'agente ha fatto la sua mossa
-        return moveMade;
-    }
-
-    //imposta il valore a true o false se necessario
-    //se true, indica che l'agente ha deciso la sua mossa e attende di sapere dalla classe Gioco se può farla o meno
-    public void setMoveMade(boolean moveMade) {
-        this.moveMade = moveMade;
-    }
-
-    //restituisce la mossa che l'agente ha scelto di fare
-    //serve alla classe gioco per sapere in quale casella l'agente vuole andare, per vedere se essa entra in conflitto con quella di un altro agente
-    public String getMove() {
-        return move;
-    }
-
-    //modifica il valore della stringa contenente la mossa che vuole fare l'agente
-    public void setMove(String move) {
-        this.move = move;
-    }
-
-    
 
 }
