@@ -31,6 +31,10 @@ public class Agente extends Thread implements Ag_Interface {
 
     // avvia le azioni degli agenti
     public void run() {
+        if(game.checkIfNoTime()){
+            this.interrupt();
+        }
+
         System.out.println(getNome());
         System.out.println(adiacenti[1].getStato() + "(" + adiacenti[1].getOccupazione() + ")" + "   "
                 + adiacenti[2].getStato() + "(" + adiacenti[2].getOccupazione() + ")" + "   " + adiacenti[3].getStato()
@@ -45,7 +49,9 @@ public class Agente extends Thread implements Ag_Interface {
         System.out.println("Territori:");
         for (Casella c : territori)
             System.out.println("[" + c.getX() + ", " + c.getY() + "]");
+        askMove();
     }
+
 
     public void askMove(){
         int scelta = 1;
@@ -147,11 +153,8 @@ public class Agente extends Thread implements Ag_Interface {
     // metodo per compiere l'azione di piantare la bandiera ed entrare in possesso
     // della casella in cui è posizionato
     public void pianta() {
-        /*if (scacchiera.pianta(this.posizione.getX(), this.posizione.getY(), this)) {
-            energia--;
-            territori.add(posizione);
-        }*/
-        
+        game.verifyMove(this, "pianta");
+        game.updateRanking();
     }
 
     @Override
@@ -220,42 +223,50 @@ public class Agente extends Thread implements Ag_Interface {
     // richiesta spostamento a sinistra
     public void sinistra() {
         game.verifyMove(this, "sinistra");
+        game.updateRanking();
     }
 
     // richiesta spostamento a alto a sinistra
     public void alto_sinistra() {
         game.verifyMove(this, "alto_sinistra");
+        game.updateRanking();
     }
 
     // richiesta spostamento in alto
     public void alto() {
-        game.verifyMove(this, "alto");            
+        game.verifyMove(this, "alto");   
+        game.updateRanking();         
     }
 
     // richiesta spostamento in alto a destra
     public void alto_destra() {
         game.verifyMove(this, "alto_destra");
+        game.updateRanking();
     }
 
     // richiesta spostamento a destra
     public void destra() {
         game.verifyMove(this, "destra");
+        game.updateRanking();
         
     }
 
     // richiesta spostamento in basso a destra
     public void basso_destra() {
         game.verifyMove(this, "basso_destra");
+        game.updateRanking();
     }
 
     // richiesta spostamento in basso
     public void basso() {
         game.verifyMove(this, "basso");
+        game.updateRanking();
     }
 
     // richiesta spostamento in basso a sinistra
     public void basso_sinistra() {
         game.verifyMove(this, "basso_sinistra");
+        game.updateRanking();
         
     }
 

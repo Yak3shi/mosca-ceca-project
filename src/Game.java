@@ -49,10 +49,6 @@ public class Game {
         }
     }
 
-    public boolean allMovesReceived(){//Controlla che tutti gli agenti abbiano inviato le loro mosse
-        return false;
-    }
-
     public void execTurn(){
         generateAgents();
         while(!checkIfNoTime()){
@@ -136,10 +132,20 @@ public class Game {
                 }    
                 break;
         }
-
     }
 
-    public void updateRanking(){
+    // Fa partire l'esecuzione degli agenti e li fa joinare
+    public void esegui() throws InterruptedException {
+        for(Agente a: playerList)
+            a.start();
+        for(Agente a: playerList)
+            a.join();
+    }
 
+    // Aggiorna la classifica in base a
+            // - 
+    public void updateRanking(){
+        //INSERT CODE HERE
+        
     }
 }
