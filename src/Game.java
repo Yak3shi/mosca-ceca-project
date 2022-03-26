@@ -60,9 +60,10 @@ public class Game {
         }
     }
 
-    public void execTurn(){
+    public void execTurn() throws InterruptedException{
         generateAgents();
         while(!checkIfNoTime()){
+            esegui();
             for (Agente a: ranking){
                 System.out.println(a.getName());
             }
