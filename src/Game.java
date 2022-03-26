@@ -6,6 +6,7 @@ public class Game {
     int timeLimit;  //Segna il limite di tempo di una partita (millisecondi)
     
     ArrayList <Agente> playerList = new ArrayList<>(); //Lista a cui attingere per comunicare con i vari giocatori
+    Agente ranking[];  //Classifica agenti 
 
     //AGGIUNTA AGENTI ALLA PARTITA
     //per il momento è una cosa fatta automaticamente, poi penseremo dopo a come adattarlo al multiplayer online 
@@ -22,9 +23,19 @@ public class Game {
                     y = scacchiera.xy();
                 }
         }
+
+        for(Agente a: playerList)
+            addToRanking(a);
     }
 
-    Agente Classifica[];  //Classifica agenti 
+    //Aggiunge un agente alla Classifica in modo che possa essere comparato con gli altri agenti
+    public void addToRanking(Agente a){
+        int i = 0;
+        while(ranking[i] != null){
+            i++;
+        }
+        ranking[i] = a;
+    }
 
     //VENGONO PASSATI TEMPO TOTALE e IL RIFERIMENTO ALLA SCACCHIERA
     public Game(int tempo, Scacchiera partita) {
@@ -42,9 +53,9 @@ public class Game {
 
     public void endGame(String endmsg){
         System.out.println(endmsg);
-        System.out.println("IL VINCITORE E' --> " + Classifica[0].toString()
-                            + "\n \nCLASSIFICA FINALE");
-        for(Agente a: Classifica){
+        System.out.println("IL VINCITORE E' --> " + ranking[0].toString()
+                            + "\n \nranking FINALE");
+        for(Agente a: ranking){
             System.out.println(a.toString());
         }
     }
@@ -52,7 +63,7 @@ public class Game {
     public void execTurn(){
         generateAgents();
         while(!checkIfNoTime()){
-            for (Agente a: Classifica){
+            for (Agente a: ranking){
                 System.out.println(a.getName());
             }
         }
@@ -147,24 +158,24 @@ public class Game {
             // - (in caso di pari territori) Stoffa (territori potenzialmente conquistabili)
             // - (in caso di pari stoffa) Energia (potenziale di movimento)
     public void updateRanking(){
-        Agente temp = new Agente();
+        Agente temp;
 
-        for (int i = Classifica.length() - 1; i > 0; i--){
+        for (int i = ranking.length - 1; i > 0; i--){
             for (int j = 0; j < i; j++){
-                if (Classifica[j].territori.size > Classifica [j + 1].territori.size){ // Swappa due agenti nella classifica in base a chi dei due ha più territori conquistati
-                    temp = Classifica[j];
-                    Classifica[j] = Classifica[j+1];
-                    Classifica[j+1] = temp;
-                } else if (Classifica[j].territori.size = Classifica [j + 1].territori.size){ // Se due agenti hanno gli stessi territori, controlla chi hai più stoffa
-                    if(Classifica[j].stoffa > Classifica[j+1].stoffa){                              // Swappa due agenti in base a chi dei due ha più stoffa
-                        temp = Classifica[j];
-                        Classifica[j] = Classifica[j+1];
-                        Classifica[j+1] = temp;
-                    } else if (Classifica[j].stoffa = Classifica[j+1].stoffa){                // Se due agenti hanno anche la stessa stoffa
-                        if(Classifica[j].energia > Classifica[j+1].energia){                        // Swappa due agenti in base a chi dei due ha più energia
-                            temp = Classifica[j];
-                            Classifica[j] = Classifica[j+1];
-                            Classifica[j+1] = temp;
+                if (ranking[j].territori.size() > ranking [j + 1].territori.size()){ // Swappa due agenti nella ranking in base a chi dei due ha più territori conquistati
+                    temp = ranking[j];
+                    ranking[j] = ranking[j+1];
+                    ranking[j+1] = temp;
+                } else if (ranking[j].territori.size() == ranking [j + 1].territori.size()){ // Se due agenti hanno gli stessi territori, controlla chi hai più stoffa
+                    if(ranking[j].getStoffa() > ranking[j+1].getStoffa()){                              // Swappa due agenti in base a chi dei due ha più stoffa
+                        temp = ranking[j];
+                        ranking[j] = ranking[j+1];
+                        ranking[j+1] = temp;
+                    } else if (ranking[j].getStoffa() == ranking[j+1].getStoffa()){                // Se due agenti hanno anche la stessa stoffa
+                        if(ranking[j].getEnergia() > ranking[j+1].getEnergia()){                        // Swappa due agenti in base a chi dei due ha più energia
+                            temp = ranking[j];
+                            ranking[j] = ranking[j+1];
+                            ranking[j+1] = temp;
                         }
                     }
                 }
