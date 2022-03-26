@@ -249,7 +249,6 @@ public class Agente extends Thread implements Ag_Interface {
     public void destra() {
         game.verifyMove(this, "destra");
         game.updateRanking();
-        
     }
 
     // richiesta spostamento in basso a destra
@@ -268,7 +267,6 @@ public class Agente extends Thread implements Ag_Interface {
     public void basso_sinistra() {
         game.verifyMove(this, "basso_sinistra");
         game.updateRanking();
-        
     }
 
 }
