@@ -9,6 +9,7 @@ Il gioco è una sorta di lotta strategica tra N agenti che si scontrano per acca
 - Tutti i giocatori meno uno vengono eliminati
 - Il tempo termina
 - Si raggiunge il numero totale di turni
+
 Nel primo caso, ovviamente, viene dichiarato vincitore l'unico agente rimasto. Nel secondo e terzo caso, tuttavia, il vincitore viene decretato utilizzando una classifica ordinata in base a: 
 - Territori conquistati
 - Pezzi di stoffa non utilizzati (in caso di parità sui territori conquistati, si conta il numero di potenziali territori conquistabili)
