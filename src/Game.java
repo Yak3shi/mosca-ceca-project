@@ -143,9 +143,32 @@ public class Game {
     }
 
     // Aggiorna la classifica in base a
-            // - 
+            // - Territori conquistati
+            // - (in caso di pari territori) Stoffa (territori potenzialmente conquistabili)
+            // - (in caso di pari stoffa) Energia (potenziale di movimento)
     public void updateRanking(){
-        //INSERT CODE HERE
-        
+        Agente temp = new Agente();
+
+        for (int i = Classifica.length() - 1; i > 0; i--){
+            for (int j = 0; j < i; j++){
+                if (Classifica[j].territori.size > Classifica [j + 1].territori.size){ // Swappa due agenti nella classifica in base a chi dei due ha più territori conquistati
+                    temp = Classifica[j];
+                    Classifica[j] = Classifica[j+1];
+                    Classifica[j+1] = temp;
+                } else if (Classifica[j].territori.size = Classifica [j + 1].territori.size){ // Se due agenti hanno gli stessi territori, controlla chi hai più stoffa
+                    if(Classifica[j].stoffa > Classifica[j+1].stoffa){                              // Swappa due agenti in base a chi dei due ha più stoffa
+                        temp = Classifica[j];
+                        Classifica[j] = Classifica[j+1];
+                        Classifica[j+1] = temp;
+                    } else if (Classifica[j].stoffa = Classifica[j+1].stoffa){                // Se due agenti hanno anche la stessa stoffa
+                        if(Classifica[j].energia > Classifica[j+1].energia){                        // Swappa due agenti in base a chi dei due ha più energia
+                            temp = Classifica[j];
+                            Classifica[j] = Classifica[j+1];
+                            Classifica[j+1] = temp;
+                        }
+                    }
+                }
+            }
+        } 
     }
 }
