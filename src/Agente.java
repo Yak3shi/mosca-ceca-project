@@ -50,6 +50,7 @@ public class Agente extends Thread implements Ag_Interface {
         for (Casella c : territori)
             System.out.println("[" + c.getX() + ", " + c.getY() + "]");
         askMove();
+        g.updateRanking();
     }
 
 
